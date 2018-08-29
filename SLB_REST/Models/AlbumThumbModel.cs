@@ -7,12 +7,14 @@ namespace SLB_REST.Models
 {
 	public class AlbumThumbModel
 	{
-		public int Id { get; set; }
+		public int ID { get; set; }
 		public string ImageThumbSrc { get; set; }
 		public string Title { get; set; }
 		public string ArtistName { get; set; }
 		public string Style { get; set; }
 		public string Genres { get; set; }
+
+		public AlbumThumbModel(){ }
 
 		public AlbumThumbModel(int id, string imageThumbSrc, string title, string artistName, string style, string genres)
 		{
@@ -21,7 +23,7 @@ namespace SLB_REST.Models
 			ArtistName = artistName;
 			Style = style;
 			Genres = genres;
-			Id = id;
+			ID = id;
 		}
 	}
 }

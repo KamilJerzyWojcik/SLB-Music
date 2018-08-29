@@ -1,8 +1,8 @@
 ﻿namespace SLB_REST.Models
 {
-	public class ExtraArtistModel
+	public class StyleModel
 	{
 		public int ID { get; set; }
-		public string Name { get; set; }
+		public string Style { get; set; }
 	}
 }
