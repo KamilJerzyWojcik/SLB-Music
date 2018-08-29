@@ -40,10 +40,6 @@
             if (albums != "" && albums != null) {
 
                 var albumsJson = JSON.parse(albums);
-
-                console.log(albumsJson);
-
-
                 if (albumOnPage == null) albumOnPage = Array(albumsJson.pagination.pages);
 
                 if (typeof albumOnPage[albumsJson.pagination.page - 1] == "undefined")
