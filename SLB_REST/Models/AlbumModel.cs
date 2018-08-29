@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace SLB_REST.Models
 {
-	public class JsonModel
+	public class AlbumModel
 	{
-		public List<AlbumThumbModel> Albums { get; set; }
-		public double Pages { get; set; } = 0;
+		public string Title { get; set; }
 
-    }
+	}
 }

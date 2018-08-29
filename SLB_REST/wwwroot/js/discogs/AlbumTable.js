@@ -36,17 +36,27 @@
 
         }).done(function (albums) {
 
-            var albumsJson = JSON.parse(albums);
 
-            if (albumOnPage == null) albumOnPage = Array(albumsJson.pagination.pages);
+            if (albums != "" && albums != null) {
 
-            if (typeof albumOnPage[albumsJson.pagination.page - 1] == "undefined")
-                albumOnPage[albumsJson.pagination.page - 1] = albumsJson;
+                var albumsJson = JSON.parse(albums);
 
-            var container = document.getElementById("container");
-            container.innerHTML = "";
-            getPagination(albumsJson.pagination, albumOnPage);
-            getTable(albumsJson, albumOnPage);
+                console.log(albumsJson);
+
+
+                if (albumOnPage == null) albumOnPage = Array(albumsJson.pagination.pages);
+
+                if (typeof albumOnPage[albumsJson.pagination.page - 1] == "undefined")
+                    albumOnPage[albumsJson.pagination.page - 1] = albumsJson;
+
+                var container = document.getElementById("container");
+                container.innerHTML = "";
+                getPagination(albumsJson.pagination, albumOnPage);
+                getTable(albumsJson, albumOnPage);
+
+            }
+
+            
 
         }).fail(function (error) {
             console.log("Błąd pobieranie tabeli")
@@ -132,6 +142,7 @@ function AddHead(tr, headTable) {
 
     for (let i = 0; i < headTable.length; i++) {
         var th = elementTable("th", "", "col");
+        th.classList.add("th-content")
         th.innerText = headTable[i];
         tr.appendChild(th);
     }
@@ -141,6 +152,7 @@ function AddHead(tr, headTable) {
 
 function GetTableWithHead(headTable) {
     var table = elementTable("table", "table");
+    table.classList.add("table-content-all")
     var thead = elementTable("thead", "thead-dark");
     var tr = elementTable("tr");
 
@@ -157,13 +169,14 @@ function AddRowToTable(typeTable, valueTable, resource_url, albumOnPage) {
     for (let i = 0; i < typeTable.length; i++) {
 
         var td = document.createElement("td");
-
+        td.classList.add("td-content")
         if (typeTable[i] == "img") {
 
             var img = document.createElement("img");
             img.setAttribute("src", valueTable[i]);
             img.setAttribute("alt", "image");
             img.classList.add("thumb");
+            img.classList.add("img-content");
             td.appendChild(img);
             tr.appendChild(td);
             continue;

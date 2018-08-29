@@ -18,15 +18,15 @@
     height: 300px;
 }
 
-table {
+.table-content-all {
     margin-left: auto;
     margin-right: auto;
 }
 
-td {
+.td-content {
     max-width: 150px;
 }
-th {
+.th-content {
     max-width: 150px;
 }
 
@@ -35,7 +35,7 @@ th {
     margin-right: auto;
 }
 
-img {
+.img-content {
     max-width: 300px;
     max-height: 300px;
 }
@@ -45,7 +45,7 @@ img {
     height: 300px;
 }
 
-p {
+.paragraph-content {
     padding: 10px;
 }
 
@@ -56,4 +56,22 @@ p {
 
 #player-nav {
     text-align: center;
+}
+
+.text {
+    line-height: 15px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+}
+
+.my-album-card {
+    height: 320px;
+}
+
+.my-album {
+    margin-top: 10px;
+}
+
+.paginatin-albums {
+    margin-top: 10px;
 }

@@ -10,6 +10,13 @@
         getAlbums(url, data, albumOnPage);
     });
 
+    var myAlbumsButton = document.getElementById("my-albums");
+
+    GetMyAlbums();
+
+    myAlbumsButton.addEventListener("click", function () {
+        GetMyAlbums({page: 0});
+    });
 
     var albumOnPage = null;
     var url = "/Home/Albums";

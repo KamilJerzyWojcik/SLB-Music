@@ -1,39 +1,61 @@
 ﻿function ShowDiscogsAlbum(resource_url, albumOnPage) {
 
-    $.ajax({
-        url: "/Home/Links",
-        data: { link: resource_url }
+    if (resource_url != "") {
 
-    }).done(function (album) {
+        $.ajax({
+            url: "/Home/Links",
+            data: { link: resource_url }
 
-        var albumJson = JSON.parse(album);
+        }).done(function (album) {
 
+            var albumJson = JSON.parse(album);
+
+            var container = document.getElementById("container");
+            container.innerHTML = "";
+
+            ShowAlbum(albumJson, albumOnPage);
+        }).fail(function (error) {
+            console.log("Błąd pobieranie albumu")
+        });
+    }
+    else {
         var container = document.getElementById("container");
         container.innerHTML = "";
 
-        console.log(resource_url);
+        if (albumOnPage != "" && albumOnPage != null) {
+            ShowAlbum(albumOnPage, "");
+        }
+    }
 
-        ShowAlbum(albumJson, albumOnPage);
-    }).fail(function (error) {
-        console.log("Błąd pobieranie albumu")
-    });
 }
 
 function ShowAlbum(album, albumOnPage) {
 
     var container = document.getElementById("container");
 
-    var button = AddButton("Back", "warning");
-    button.addEventListener("click", function () {
-        getAlbums("", { link: "=1" }, albumOnPage)
-    });
-    container.appendChild(button);
-    var h3 = AddText("h3", album.title);
-    container.appendChild(h3);
-    var h3 = AddText("h5", album.artists[0].name);
-    container.appendChild(h3);
-    var h5 = AddText("h6", album.genres.join(", "));
-    container.appendChild(h5);
+    if (albumOnPage != "") {
+        var button = AddButton("Back", "warning");
+        button.addEventListener("click", function () {
+            getAlbums("", { link: "=1" }, albumOnPage)
+        });
+        container.appendChild(button);
+    }
+
+    if (typeof album.title != 'undefined') {
+        var h3 = AddText("h3", album.title);
+        container.appendChild(h3);
+    }
+
+    if (typeof album.artists != 'undefined') {
+        var h3 = AddText("h5", album.artists[0].name);
+        container.appendChild(h3);
+    }
+
+
+    if (typeof album.genres != 'undefined') {
+        var h5 = AddText("h6", album.genres.join(", "));
+        container.appendChild(h5);
+    }
 
     AddCarousell(container, album);
     var hr = document.createElement("hr");
@@ -50,8 +72,9 @@ function AddNavYt(album) {
     var divYtNav = document.createElement("div");
     divYtNav.setAttribute("id", "player-nav");
     divYtNav.setAttribute("actual", "0");
-    divYtNav.setAttribute("max", `${album.videos.length-1}`);
-
+    if (typeof album.videos != 'undefined') {
+        divYtNav.setAttribute("max", `${album.videos.length - 1}`);
+    }
     var bNext = AddButton("Next", "info");
     bNext.classList.add("btn-lg")
     var bPrev = AddButton("Prev", "secondary");
@@ -61,6 +84,7 @@ function AddNavYt(album) {
     divYtNav.appendChild(bNext);
 
     var text = document.createElement("p");
+    text.classList.add("paragraph-content")
     text.setAttribute("id", "title-video")
     divYtNav.appendChild(text);
 
@@ -68,24 +92,25 @@ function AddNavYt(album) {
 
     var divYt = document.createElement("div");
     divYt.setAttribute("id", "player");
-    
 
-    for (let i = 0; i < album.videos.length; i++) {
+    if (typeof album.videos != 'undefined') {
+        for (let i = 0; i < album.videos.length; i++) {
 
-        var a = document.createElement("a");
-        a.setAttribute("href", album.videos[i].uri);
+            var a = document.createElement("a");
+            a.setAttribute("href", album.videos[i].uri);
 
-        var div = document.createElement("div");
-        div.style.display = "none";
+            var div = document.createElement("div");
+            div.style.display = "none";
 
-        div.appendChild(a);
+            div.appendChild(a);
 
-        divYtNav.appendChild(div);
+            divYtNav.appendChild(div);
+        }
     }
 
     container.appendChild(divYt);
 
-    AddYoutubeFrame(0, album) 
+    AddYoutubeFrame(0, album)
 
     bNext.addEventListener("click", function () {
         var div = document.getElementById("player-nav");
@@ -93,7 +118,7 @@ function AddNavYt(album) {
         var max = div.getAttribute("max");
 
         if (actual > max) actual = 0;
-        
+
         div.setAttribute("actual", actual);
 
         AddYoutubeFrame(actual, album);
@@ -117,34 +142,36 @@ function AddNavYt(album) {
 function AddYoutubeFrame(actual, album) {
 
     var p = document.getElementById("title-video");
-    p.innerText = album.videos[actual].description
+    if (typeof album.videos != 'undefined') {
+        p.innerText = album.videos[actual].description
 
-    var container = document.getElementById("container");
 
-    $("#player").remove();
+        var container = document.getElementById("container");
 
-    var divYt = document.createElement("div");
-    divYt.setAttribute("id", "player");
+        $("#player").remove();
 
-    container.appendChild(divYt);
+        var divYt = document.createElement("div");
+        divYt.setAttribute("id", "player");
 
-    var id;
-    var linkYt = album.videos[actual].uri;
+        container.appendChild(divYt);
 
-    for (let j = 0; j < 100; j++) {
-        if (linkYt[linkYt.length - 1 - j] == "=") {
-            id = linkYt.substring(linkYt.length - j, linkYt.length)
-            break;
+        var id;
+        var linkYt = album.videos[actual].uri;
+
+        for (let j = 0; j < 100; j++) {
+            if (linkYt[linkYt.length - 1 - j] == "=") {
+                id = linkYt.substring(linkYt.length - j, linkYt.length)
+                break;
+            }
         }
     }
-
     var player;
 
     player = new YT.Player('player', {
         height: '180',
         width: '320',
         videoId: id,
- 
+
     });
 }
 
@@ -159,36 +186,40 @@ function AddTrackList(container, album) {
     divCard.classList.add("card");
     divCard.classList.add("card-body");
 
-    for (let i = 0; i < album.tracklist.length; i++) {
-        var p = document.createElement("p");
-        p.innerText = `${album.tracklist[i].position} ${album.tracklist[i].duration} ${album.tracklist[i].title}, \nextra artist: `;
+    if (typeof album.tracklist != 'undefined') {
+        for (let i = 0; i < album.tracklist.length; i++) {
+            var p = document.createElement("p");
+            p.classList.add("paragraph-content");
+            p.innerText = `${album.tracklist[i].position} ${album.tracklist[i].duration} ${album.tracklist[i].title}, \nextra artist: `;
 
-        var div2 = document.createElement("div");
+            var div2 = document.createElement("div");
 
-        if (typeof album.tracklist[i].extraartists != 'undefined') {
+            if (typeof album.tracklist[i].extraartists != 'undefined') {
 
-            for (let j = 0; j < album.tracklist[i].extraartists.length; j++) {
+                for (let j = 0; j < album.tracklist[i].extraartists.length; j++) {
 
-                var aArtist = document.createElement("a");
-                aArtist.classList.add("btn");
-                aArtist.classList.add("btn-link");
-                aArtist.setAttribute("href", "#");
-                aArtist.innerText = album.tracklist[i].extraartists[j].name;
+                    var aArtist = document.createElement("a");
+                    aArtist.classList.add("btn");
+                    aArtist.classList.add("btn-link");
+                    aArtist.setAttribute("href", "#");
+                    aArtist.innerText = album.tracklist[i].extraartists[j].name;
 
-                aArtist.addEventListener("click", function () {
-                    console.log(album.tracklist[i].extraartists[j].name);
-                });
-                p.classList.add("border");
-                p.classList.add("border-primary");
-                div2.appendChild(aArtist);
-               
+                    aArtist.addEventListener("click", function () {
+                        console.log(album.tracklist[i].extraartists[j].name + "DODAJ IMPLEMENTACJE!!!!");
+                        alert("DODAJ IMPLEMENTACJE!!!!");
+                    });
+                    p.classList.add("border");
+                    p.classList.add("border-primary");
+                    div2.appendChild(aArtist);
 
+
+                }
+                p.appendChild(div2);
             }
-            p.appendChild(div2);
+
+            divCard.appendChild(p);
+
         }
-
-        divCard.appendChild(p);
-
     }
 
     var divCollapse = document.createElement("div");
@@ -265,19 +296,21 @@ function AddCarousell(container, album) {
 
     var imgTable = [];
 
+    if (typeof album.images != 'undefined') {
+        for (let i = 0; i < album.images.length; i++) {
 
-    for (let i = 0; i < album.images.length; i++) {
+            imgTable.push(album.images[i]);
 
-        imgTable.push(album.images[i]);
+            var div = AddDiv(["carousel-item"]);
 
-        var div = AddDiv(["carousel-item"]);
+            if (i == 0) div.classList.add("active");
 
-        if (i == 0) div.classList.add("active");
-
-        var img = AddImg(album.images[i].uri, i, album.images.length);
-        div.appendChild(img);
-        divInner.appendChild(div);
+            var img = AddImg(album.images[i].uri, i, album.images.length);
+            div.appendChild(img);
+            divInner.appendChild(div);
+        }
     }
+
     divCarrousel.appendChild(divInner);
 
     var aPrev = addACarousell("prev", "Previous");
