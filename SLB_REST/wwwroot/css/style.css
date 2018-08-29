@@ -1,0 +1,59 @@
+﻿body {
+    padding-top: 5rem;
+    background-color: whitesmoke;
+}
+
+.start {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.thumb {
+    width: 120px;
+    height: 120px;
+}
+
+.img-album {
+    width: 300px;
+    height: 300px;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td {
+    max-width: 150px;
+}
+th {
+    max-width: 150px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+#carouselExampleControls {
+    max-width: 300px;
+    height: 300px;
+}
+
+p {
+    padding: 10px;
+}
+
+#player-nav a{
+    margin: 25px;
+
+}
+
+#player-nav {
+    text-align: center;
+}
