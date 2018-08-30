@@ -20,7 +20,7 @@ namespace SLB_REST.Context
 		public DbSet<AlbumThumbModel> AlbumsThumb { get; set; }
 		public DbSet<ArtistModel> Artists { get; set; }
 		public DbSet<ExtraArtistModel> ExtraArtists { get; set; }
-		public DbSet<ImagesModel> Images { get; set; }
+		public DbSet<ImageModel> Images { get; set; }
 		public DbSet<TrackModel> Tracks { get; set; }
 		public DbSet<VideoModel> Videos { get; set; }
 		public DbSet<StyleModel> Styles { get; set; }

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SLB_REST.Context;
+using SLB_REST.Helpers;
 using SLB_REST.Models;
 
 namespace SLB_REST
@@ -28,6 +29,8 @@ namespace SLB_REST
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddDbContext<EFContext>(builer => builer.UseSqlServer(Configuration["connectionString"]));
+			
+			services.AddSingleton<SourceManagerEF>();
 
 			services.AddIdentity<UserModel, IdentityRole<int>>().AddEntityFrameworkStores<EFContext>().AddDefaultTokenProviders();
 

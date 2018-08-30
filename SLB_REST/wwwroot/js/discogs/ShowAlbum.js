@@ -13,7 +13,7 @@
             var container = document.getElementById("container");
             container.innerHTML = "";
 
-            ShowAlbum(albumJson, albumOnPage);
+            ShowAlbum(albumJson, albumOnPage, resource_url);
         }).fail(function (error) {
             console.log("Błąd pobieranie albumu")
         });
@@ -29,7 +29,7 @@
 
 }
 
-function ShowAlbum(album, albumOnPage) {
+function ShowAlbum(album, albumOnPage, resource_url) {
 
     var container = document.getElementById("container");
 
@@ -40,6 +40,21 @@ function ShowAlbum(album, albumOnPage) {
         });
         container.appendChild(button);
     }
+
+    var button2 = AddButton("Add to favorite", "success");
+    button2.addEventListener("click", function () {
+
+        
+        $.ajax({
+            url: "/Home/GetMyAlbum",
+            data: { link: resource_url },
+            method: "POST"
+        }).done(function () {
+        }).fail(function (error) {
+            console.log("Błąd zapisu albumu")
+        });
+    });
+    container.appendChild(button2);
 
     if (typeof album.title != 'undefined') {
         var h3 = AddText("h3", album.title);

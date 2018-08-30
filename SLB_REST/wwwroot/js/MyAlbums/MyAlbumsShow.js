@@ -52,18 +52,20 @@ function ShowCards(album) {
 
         linkMyAlbum.addEventListener("click", function () {
 
-            $.ajax({
-                url: "/Home/GetMyAlbum",
-                data: { id: album[i].id }
+            ShowMyAlbum(album.album.id);
 
-            }).done(function (album) {
+            //$.ajax({
+            //    url: "/Home/GetMyAlbum",
+            //    data: { id: album[i].id }
 
-                console.log(album);
-                ShowDiscogsAlbum("", album)
+            //}).done(function (album) {
+
+            //    console.log(album);
+            //    ShowDiscogsAlbum("", album)
                
-            }).fail(function (error) {
-                console.log("Błąd pobieranie albumu")
-            });
+            //}).fail(function (error) {
+            //    console.log("Błąd pobieranie albumu")
+            //});
         });
 
         var imgMyAlbum = document.createElement("img");

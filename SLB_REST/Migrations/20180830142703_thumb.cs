@@ -5,27 +5,10 @@ using System.Collections.Generic;
 
 namespace SLB_REST.Migrations
 {
-    public partial class Initial : Migration
+    public partial class thumb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AlbumsThumb",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ArtistName = table.Column<string>(nullable: true),
-                    Genres = table.Column<string>(nullable: true),
-                    ImageThumbSrc = table.Column<string>(nullable: true),
-                    Style = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AlbumsThumb", x => x.ID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -194,6 +177,37 @@ namespace SLB_REST.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AlbumsThumb",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AlbumID = table.Column<int>(nullable: true),
+                    ArtistName = table.Column<string>(nullable: true),
+                    Genres = table.Column<string>(nullable: true),
+                    ImageThumbSrc = table.Column<string>(nullable: true),
+                    Style = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    UserID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlbumsThumb", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_AlbumsThumb_Albums_AlbumID",
+                        column: x => x.AlbumID,
+                        principalTable: "Albums",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AlbumsThumb_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Artists",
                 columns: table => new
                 {
@@ -207,26 +221,6 @@ namespace SLB_REST.Migrations
                     table.PrimaryKey("PK_Artists", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Artists_Albums_AlbumModelID",
-                        column: x => x.AlbumModelID,
-                        principalTable: "Albums",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ExtraArtists",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AlbumModelID = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExtraArtists", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_ExtraArtists_Albums_AlbumModelID",
                         column: x => x.AlbumModelID,
                         principalTable: "Albums",
                         principalColumn: "ID",
@@ -336,9 +330,41 @@ namespace SLB_REST.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ExtraArtists",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    TrackModelID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExtraArtists", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ExtraArtists_Tracks_TrackModelID",
+                        column: x => x.TrackModelID,
+                        principalTable: "Tracks",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Albums_UserID",
                 table: "Albums",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlbumsThumb_AlbumID",
+                table: "AlbumsThumb",
+                column: "AlbumID",
+                unique: true,
+                filter: "[AlbumID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlbumsThumb_UserID",
+                table: "AlbumsThumb",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
@@ -386,9 +412,9 @@ namespace SLB_REST.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExtraArtists_AlbumModelID",
+                name: "IX_ExtraArtists_TrackModelID",
                 table: "ExtraArtists",
-                column: "AlbumModelID");
+                column: "TrackModelID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Genres_AlbumModelID",
@@ -452,13 +478,13 @@ namespace SLB_REST.Migrations
                 name: "Styles");
 
             migrationBuilder.DropTable(
-                name: "Tracks");
-
-            migrationBuilder.DropTable(
                 name: "Videos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Tracks");
 
             migrationBuilder.DropTable(
                 name: "Albums");

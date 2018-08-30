@@ -146,6 +146,8 @@ namespace SLB_REST.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("AlbumID");
+
                     b.Property<string>("ArtistName");
 
                     b.Property<string>("Genres");
@@ -156,7 +158,15 @@ namespace SLB_REST.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int?>("UserID");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("AlbumID")
+                        .IsUnique()
+                        .HasFilter("[AlbumID] IS NOT NULL");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("AlbumsThumb");
                 });
@@ -182,13 +192,13 @@ namespace SLB_REST.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AlbumModelID");
-
                     b.Property<string>("Name");
+
+                    b.Property<int?>("TrackModelID");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("AlbumModelID");
+                    b.HasIndex("TrackModelID");
 
                     b.ToTable("ExtraArtists");
                 });
@@ -209,7 +219,7 @@ namespace SLB_REST.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("SLB_REST.Models.ImagesModel", b =>
+            modelBuilder.Entity("SLB_REST.Models.ImageModel", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -382,6 +392,17 @@ namespace SLB_REST.Migrations
                         .HasForeignKey("UserID");
                 });
 
+            modelBuilder.Entity("SLB_REST.Models.AlbumThumbModel", b =>
+                {
+                    b.HasOne("SLB_REST.Models.AlbumModel", "Album")
+                        .WithOne("AlbumThumb")
+                        .HasForeignKey("SLB_REST.Models.AlbumThumbModel", "AlbumID");
+
+                    b.HasOne("SLB_REST.Models.UserModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
             modelBuilder.Entity("SLB_REST.Models.ArtistModel", b =>
                 {
                     b.HasOne("SLB_REST.Models.AlbumModel")
@@ -391,9 +412,9 @@ namespace SLB_REST.Migrations
 
             modelBuilder.Entity("SLB_REST.Models.ExtraArtistModel", b =>
                 {
-                    b.HasOne("SLB_REST.Models.AlbumModel")
-                        .WithMany("Extraartists")
-                        .HasForeignKey("AlbumModelID");
+                    b.HasOne("SLB_REST.Models.TrackModel")
+                        .WithMany("ExtraArtists")
+                        .HasForeignKey("TrackModelID");
                 });
 
             modelBuilder.Entity("SLB_REST.Models.GenreModel", b =>
@@ -403,7 +424,7 @@ namespace SLB_REST.Migrations
                         .HasForeignKey("AlbumModelID");
                 });
 
-            modelBuilder.Entity("SLB_REST.Models.ImagesModel", b =>
+            modelBuilder.Entity("SLB_REST.Models.ImageModel", b =>
                 {
                     b.HasOne("SLB_REST.Models.AlbumModel")
                         .WithMany("Images")

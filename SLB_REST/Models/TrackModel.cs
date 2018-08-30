@@ -1,4 +1,6 @@
-﻿namespace SLB_REST.Models
+﻿using System.Collections.Generic;
+
+namespace SLB_REST.Models
 {
 	public class TrackModel
 	{
@@ -6,5 +8,6 @@
 		public string Position { get; set; }
 		public string Duration { get; set; }
 		public string Title { get; set; }
+		public ICollection<ExtraArtistModel> ExtraArtists{ get; set; }
 	}
 }

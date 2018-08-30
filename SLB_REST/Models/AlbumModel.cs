@@ -14,13 +14,12 @@ namespace SLB_REST.Models
 		public UserModel User { get; set; }
 
 		public string Title { get; set; }
-
+		public AlbumThumbModel AlbumThumb { get; set; }
 		public ICollection<ArtistModel> Artists { get; set; }
 		public ICollection<GenreModel> Genres { get; set; }
 		public ICollection<StyleModel> Styles { get; set; }
 		public ICollection<VideoModel> Videos { get; set; }
 		public ICollection<TrackModel> Tracks { get; set; }
-		public ICollection<ExtraArtistModel> Extraartists { get; set; }
-		public ICollection<ImagesModel> Images { get; set; }
+		public ICollection<ImageModel> Images { get; set; }
 	}
 }
